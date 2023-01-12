@@ -14,10 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,13 +47,7 @@ public class BookServiceImpl implements BookService {
             }
 
             EditionType editionType = EditionType.values()[Integer.parseInt(line[0])];
-            SimpleDateFormat formatter = new SimpleDateFormat("d/M/yyyy");
-            Date releaseDate = null;
-            try {
-                releaseDate = formatter.parse(line [1]);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            LocalDate releaseDate = LocalDate.parse(line[1]);
 
             int copies = Integer.parseInt(line[2]);
             BigDecimal price = new BigDecimal(line[3]);
@@ -82,12 +74,60 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Set<Book> findBooksAfterYear(Date year) {
+    public Set<Book> findBooksAfterYear(LocalDate year) {
         return this.bookRepository.findAllByReleaseDateAfter(year);
     }
 
     @Override
     public Set<Book> getBooksByAuthorNames() {
         return this.bookRepository.findAllByAuthorFirstNameAndAuthorLastNameOrderByReleaseDateDescTitle("George", "Powell");
+    }
+
+    @Override
+    public Set<Book> getAllBooksByAgeRestriction(AgeRestriction ageRestriction) {
+        return this.bookRepository.findAllByAgeRestriction(ageRestriction);
+    }
+
+    @Override
+    public Set<Book> getAllBooksByCopies(EditionType editionType, int copies) {
+        return this.bookRepository.findAllByEditionTypeAndCopiesIsLessThan(editionType, copies);
+    }
+
+    @Override
+    public Set<Book> getAllBooksInPriceRange(BigDecimal lessThan, BigDecimal greaterThan) {
+        return this.bookRepository.findAllByPriceLessThanOrPriceGreaterThan(lessThan, greaterThan);
+    }
+
+    @Override
+    public Set<Book> getAllBooksByReleaseYear(String yearStr) {
+        int year = Integer.parseInt(yearStr);
+        return this.bookRepository.findAllByReleaseDateBeforeOrReleaseDateAfter(
+                LocalDate.of(year, 1, 1),
+                LocalDate.of(year, 12, 31));
+    }
+
+    @Override
+    public Set<Book> getAllBooksBeforeDate(LocalDate before) {
+        return this.bookRepository.findAllByReleaseDateBefore(before);
+    }
+
+    @Override
+    public Set<Book> getAllBooksByTitlePart(String word) {
+        return this.bookRepository.findAllByTitleIsContaining(word);
+    }
+
+    @Override
+    public Set<Book> getAllBooksAuthorLastNameStartsWith(String word) {
+        return this.bookRepository.findAllByAuthorLastNameStartsWith(word);
+    }
+
+    @Override
+    public int getBooksCountWithLongerTitlesThan(int size) {
+        return this.bookRepository.countBooksByTitleSize(size);
+    }
+
+    @Override
+    public Set<String> getBookInformationByTitle(String title) {
+        return this.bookRepository.getBookInformationWithTitle(title);
     }
 }

@@ -1,7 +1,5 @@
 package com.example.bookshopsystem;
 
-import com.example.bookshopsystem.entity.Author;
-import com.example.bookshopsystem.entity.Book;
 import com.example.bookshopsystem.service.AuthorService;
 import com.example.bookshopsystem.service.BookService;
 import com.example.bookshopsystem.service.CategoryService;
@@ -10,9 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Set;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 @Component
 @Transactional
@@ -36,38 +33,73 @@ public class ConsoleRunner implements CommandLineRunner {
 
 
         // Get all books after year 2000
-        //exerciseOne();
+        //this.bookService.findBooksAfterYear(LocalDate.parse("01/01/2000", DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+        //        .forEach(record -> System.out.printf("%s  -> %s%n", record.getTitle(), record.getReleaseDate().toString()));
 
         // Get all authors with one book after 1990
-        //exerciseTwo();
+        //this.authorService.getAuthorsByBooksCount()
+        //        .forEach(author -> System.out.printf("%s %s%n", author.getFirstName(), author.getLastName()));
 
         // Get all authors with their book count
-        //exerciseTree();
+        //this.authorService.getAllAuthorsWithBooksCount()
+        //        .forEach(author -> System.out.printf("%s %s %d%n", author.getFirstName(), author.getLastName(), author.getBooks().size()));
 
         // Get all George Powell books
-        //exerciseFour();
+        //this.bookService.getBooksByAuthorNames()
+        //        .forEach(book -> System.out.printf("%s %s %d%n", book.getTitle(), book.getReleaseDate(), book.getCopies()));
 
-        System.out.println();
-    }
+        // #Spring Data Advanced Quering
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String input = br.readLine();
 
-    private void exerciseOne() throws Exception {
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2000");
-        Set<Book> booksAfterYear = this.bookService.findBooksAfterYear(date);
-        booksAfterYear.forEach(record -> System.out.printf("%s  -> %s%n", record.getTitle(), record.getReleaseDate().toString()));
-    }
+        // 1. Books Titles by Age Restriction
+        //this.bookService.getAllBooksByAgeRestriction(AgeRestriction.valueOf(input.toUpperCase()))
+        //                .forEach(book -> System.out.println(book.getTitle()));
 
-    private void exerciseTwo() {
-        Set<Author> authorsByBooksCount = this.authorService.getAuthorsByBooksCount();
-        authorsByBooksCount.forEach(author -> System.out.printf("%s %s%n", author.getFirstName(), author.getLastName()));
-    }
+        // 2. Golden Books
+        //this.bookService.getAllBooksByCopies(EditionType.GOLD, 5000)
+        //        .forEach(book -> System.out.println(book.getTitle()));
 
-    private void exerciseTree() {
-        Set<Author> allAuthorsWithBooksCount = this.authorService.getAllAuthorsWithBooksCount();
-        allAuthorsWithBooksCount.forEach(author -> System.out.printf("%s %s %d%n", author.getFirstName(), author.getLastName(), author.getBooks().size()));
-    }
+        // 3. Books by Price
+        //this.bookService.getAllBooksInPriceRange(new BigDecimal(5), new BigDecimal(40))
+        //        .forEach(book -> System.out.printf("%s - %.2f%n", book.getTitle(), book.getPrice()));
 
-    private void exerciseFour() {
-        Set<Book> booksByAuthorNames = this.bookService.getBooksByAuthorNames();
-        booksByAuthorNames.forEach(book -> System.out.printf("%s %s %d%n", book.getTitle(), book.getReleaseDate(), book.getCopies()));
+        // 4. Not Released Books
+        //this.bookService.getAllBooksByReleaseYear(input)
+        //        .forEach(book -> System.out.println(book.getTitle()));
+
+        // 5. Books Released Before Date
+        //this.bookService.getAllBooksBeforeDate(LocalDate.parse(
+        //        LocalDate.parse(input, DateTimeFormatter.ofPattern("dd-MM-yyyy")).
+        //                format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))))
+        //        .forEach(book -> System.out.printf("%s %s %.2f%n", book.getTitle(), book.getEditionType(), book.getPrice()));
+
+        // 6. Authors Search
+        //this.authorService.getAllAuthorsNamesEndingWith(input)
+        //        .forEach(author -> System.out.printf("%s %s%n", author.getFirstName(), author.getLastName()));
+
+        // 7. Books Search
+        //this.bookService.getAllBooksByTitlePart(input)
+        //        .forEach(book -> System.out.println(book.getTitle()));
+
+        // 8. Book Titles Search
+        //this.bookService.getAllBooksAuthorLastNameStartsWith(input)
+        //        .forEach(book -> System.out.printf("%s (%s %s)%n", book.getTitle(), book.getAuthor().getFirstName(), book.getAuthor().getLastName()));
+
+        // 9. Count Books
+        //System.out.printf("There are %d books with longer title than %s symbols%n", this.bookService.getBooksCountWithLongerTitlesThan(Integer.parseInt(input)), input);
+
+        // 10. Total Book Copies
+        //this.authorService.getAllAuthorsWithAllBookCopies().forEach(record -> {
+        //    String[] elements = record.split(",");
+        //    System.out.printf("%s %s - %s%n", elements[0], elements[1], elements[2]);
+        //});
+
+        // 11. Reduced Book
+        //this.bookService.getBookInformationByTitle(input)
+        //        .forEach(book -> {
+        //            String[] elements = book.split(",");
+        //            System.out.printf("%s %s %.2f%n", elements[0], elements[1], Double.parseDouble(elements[2]));
+        //        });
     }
 }

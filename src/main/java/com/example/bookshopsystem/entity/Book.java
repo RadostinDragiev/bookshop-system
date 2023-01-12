@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -29,7 +29,7 @@ public class Book extends BaseEntity {
     @Column(nullable = false)
     private int copies;
     @Column(name = "release_date")
-    private Date releaseDate;
+    private LocalDate releaseDate;
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "age_restriction", nullable = false)
     private AgeRestriction ageRestriction;

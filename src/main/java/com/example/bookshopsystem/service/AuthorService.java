@@ -13,4 +13,8 @@ public interface AuthorService {
     Set<Author> getAuthorsByBooksCount();
 
     Set<Author> getAllAuthorsWithBooksCount();
+
+    Set<Author> getAllAuthorsNamesEndingWith(String endsWith);
+
+    Set<String> getAllAuthorsWithAllBookCopies();
 }

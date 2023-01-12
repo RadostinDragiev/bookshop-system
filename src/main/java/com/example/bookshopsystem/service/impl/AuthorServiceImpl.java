@@ -53,4 +53,14 @@ public class AuthorServiceImpl implements AuthorService {
     public Set<Author> getAllAuthorsWithBooksCount() {
         return this.authorRepository.getAllAuthorsByBooksCountDesc();
     }
+
+    @Override
+    public Set<Author> getAllAuthorsNamesEndingWith(String endsWith) {
+        return this.authorRepository.findAllByFirstNameEndingWith(endsWith);
+    }
+
+    @Override
+    public Set<String> getAllAuthorsWithAllBookCopies() {
+        return this.authorRepository.getAllAuthorsWithBookCopiesCount();
+    }
 }
